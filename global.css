@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.tabBox{
+  height: 60px;
+  margin-bottom: 14px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 16px;
+  justify-content: "center";
+  background-color: "#DDDDDD";
+}

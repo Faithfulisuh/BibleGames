@@ -1,0 +1,21 @@
+{
+  "cli": {
+    "version": ">=16.3.2"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {},
+    "web": {
+      "adapter": "expo-router"
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
