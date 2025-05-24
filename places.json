@@ -1,0 +1,394 @@
+[
+  {
+    "name": "Jerusalem",
+    "hints": [
+      "Holy city",
+      "Jesus crucified",
+      "Temple"
+    ]
+  },
+  {
+    "name": "Bethlehem",
+    "hints": [
+      "Jesus born",
+      "David's city",
+      "Magi"
+    ]
+  },
+  {
+    "name": "Nazareth",
+    "hints": [
+      "Jesus raised",
+      "Galilee",
+      "Angel's visit"
+    ]
+  },
+  {
+    "name": "Capernaum",
+    "hints": [
+      "Jesus taught",
+      "Miracles",
+      "Galilee"
+    ]
+  },
+  {
+    "name": "Jericho",
+    "hints": [
+      "Walls fell",
+      "Joshua",
+      "Rahab"
+    ]
+  },
+  {
+    "name": "Mount Sinai",
+    "hints": [
+      "Ten Commandments",
+      "God spoke",
+      "Wilderness"
+    ]
+  },
+  {
+    "name": "Mount Carmel",
+    "hints": [
+      "Elijah",
+      "Prophets of Baal",
+      "Fire from heaven"
+    ]
+  },
+  {
+    "name": "Galilee",
+    "hints": [
+      "Jesus' ministry",
+      "Sea",
+      "Fishermen"
+    ]
+  },
+  {
+    "name": "Golgotha",
+    "hints": [
+      "Crucifixion",
+      "Jesus died",
+      "Skull"
+    ]
+  },
+  {
+    "name": "Gethsemane",
+    "hints": [
+      "Jesus prayed",
+      "Agony",
+      "Arrest"
+    ]
+  },
+  {
+    "name": "Jordan River",
+    "hints": [
+      "Baptism",
+      "Crossed over",
+      "John"
+    ]
+  },
+  {
+    "name": "Red Sea",
+    "hints": [
+      "Moses",
+      "Parted",
+      "Exodus"
+    ]
+  },
+  {
+    "name": "Egypt",
+    "hints": [
+      "Slavery",
+      "Pharaoh",
+      "Plagues"
+    ]
+  },
+  {
+    "name": "Babylon",
+    "hints": [
+      "Exile",
+      "Daniel",
+      "Nebuchadnezzar"
+    ]
+  },
+  {
+    "name": "Nineveh",
+    "hints": [
+      "Jonah",
+      "Repentance",
+      "Capital of Assyria"
+    ]
+  },
+  {
+    "name": "Hebron",
+    "hints": [
+      "Abraham",
+      "David reigned",
+      "Tombs"
+    ]
+  },
+  {
+    "name": "Beersheba",
+    "hints": [
+      "Well",
+      "Patriarchs",
+      "Southern border"
+    ]
+  },
+  {
+    "name": "Samaria",
+    "hints": [
+      "Northern kingdom",
+      "Woman at well",
+      "Capital"
+    ]
+  },
+  {
+    "name": "Damascus",
+    "hints": [
+      "Paul's conversion",
+      "Syria",
+      "Old city"
+    ]
+  },
+  {
+    "name": "Antioch",
+    "hints": [
+      "First called Christians",
+      "Missionary base",
+      "Paul"
+    ]
+  },
+  {
+    "name": "Patmos",
+    "hints": [
+      "Revelation",
+      "John",
+      "Island exile"
+    ]
+  },
+  {
+    "name": "Philippi",
+    "hints": [
+      "Paul",
+      "Lydia",
+      "Jailer"
+    ]
+  },
+  {
+    "name": "Corinth",
+    "hints": [
+      "Paul",
+      "Letters",
+      "Immorality"
+    ]
+  },
+  {
+    "name": "Ephesus",
+    "hints": [
+      "Temple of Artemis",
+      "Paul",
+      "Church"
+    ]
+  },
+  {
+    "name": "Thessalonica",
+    "hints": [
+      "Paul",
+      "Letters",
+      "Church"
+    ]
+  },
+  {
+    "name": "Lystra",
+    "hints": [
+      "Paul stoned",
+      "Timothy",
+      "Miracle"
+    ]
+  },
+  {
+    "name": "Derbe",
+    "hints": [
+      "Paul",
+      "Missionary journey",
+      "Asia Minor"
+    ]
+  },
+  {
+    "name": "Tyre",
+    "hints": [
+      "Phoenicia",
+      "Jesus visited",
+      "Prophets"
+    ]
+  },
+  {
+    "name": "Sidon",
+    "hints": [
+      "Coastal city",
+      "Jesus",
+      "Gentiles"
+    ]
+  },
+  {
+    "name": "Bethany",
+    "hints": [
+      "Lazarus",
+      "Mary and Martha",
+      "Jesus visited"
+    ]
+  },
+  {
+    "name": "Emmaus",
+    "hints": [
+      "Resurrected Jesus",
+      "Two disciples",
+      "Journey"
+    ]
+  },
+  {
+    "name": "Mount of Olives",
+    "hints": [
+      "Jesus ascended",
+      "Gethsemane",
+      "Prophecy"
+    ]
+  },
+  {
+    "name": "Shechem",
+    "hints": [
+      "Covenant",
+      "Jacob",
+      "Joshua"
+    ]
+  },
+  {
+    "name": "Shiloh",
+    "hints": [
+      "Tabernacle",
+      "Eli",
+      "Samuel"
+    ]
+  },
+  {
+    "name": "Ai",
+    "hints": [
+      "Israel defeated",
+      "Sin",
+      "Joshua"
+    ]
+  },
+  {
+    "name": "Bethel",
+    "hints": [
+      "Jacob's dream",
+      "Altar",
+      "Northern worship"
+    ]
+  },
+  {
+    "name": "Zion",
+    "hints": [
+      "Jerusalem",
+      "Mount",
+      "God's dwelling"
+    ]
+  },
+  {
+    "name": "Sodom",
+    "hints": [
+      "Destroyed",
+      "Lot",
+      "Sinful"
+    ]
+  },
+  {
+    "name": "Gomorrah",
+    "hints": [
+      "Destroyed",
+      "Judgment",
+      "Fire"
+    ]
+  },
+  {
+    "name": "Ararat",
+    "hints": [
+      "Noah's Ark",
+      "Mountains",
+      "Rested"
+    ]
+  },
+  {
+    "name": "Cana",
+    "hints": [
+      "Water to wine",
+      "Wedding",
+      "Jesus' miracle"
+    ]
+  },
+  {
+    "name": "Caesarea",
+    "hints": [
+      "Roman capital",
+      "Cornelius",
+      "Paul's trial"
+    ]
+  },
+  {
+    "name": "Tarsus",
+    "hints": [
+      "Paul's birthplace",
+      "Asia Minor",
+      "Roman citizen"
+    ]
+  },
+  {
+    "name": "Joppa",
+    "hints": [
+      "Peter's vision",
+      "Jonah fled",
+      "Seaport"
+    ]
+  },
+  {
+    "name": "Laodicea",
+    "hints": [
+      "Lukewarm",
+      "Revelation",
+      "Seven churches"
+    ]
+  },
+  {
+    "name": "Pergamum",
+    "hints": [
+      "Throne of Satan",
+      "Revelation",
+      "Seven churches"
+    ]
+  },
+  {
+    "name": "Smyrna",
+    "hints": [
+      "Persecuted church",
+      "Revelation",
+      "Seven churches"
+    ]
+  },
+  {
+    "name": "Philadelphia",
+    "hints": [
+      "Open door",
+      "Revelation",
+      "Seven churches"
+    ]
+  },
+  {
+    "name": "Colossae",
+    "hints": [
+      "Paul's letter",
+      "Asia Minor",
+      "Church"
+    ]
+  }
+]

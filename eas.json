@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">=16.3.2"
+    "version": ">=16.3.2",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -8,11 +9,12 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
+      "android": {
+        "buildType": "apk"
+      }
     },
-    "production": {},
-    "web": {
-      "adapter": "expo-router"
+    "production": {
+      "autoIncrement": true
     }
   },
   "submit": {

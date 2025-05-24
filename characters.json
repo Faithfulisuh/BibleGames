@@ -1,0 +1,786 @@
+[
+  {
+    "name": "Jerusalem",
+    "hints": [
+      "Holy city",
+      "Jesus crucified",
+      "Temple"
+    ]
+  },
+  {
+    "name": "Bethlehem",
+    "hints": [
+      "Jesus born",
+      "David's city",
+      "Magi"
+    ]
+  },
+  {
+    "name": "Nazareth",
+    "hints": [
+      "Jesus raised",
+      "Galilee",
+      "Angel's visit"
+    ]
+  },
+  {
+    "name": "Capernaum",
+    "hints": [
+      "Jesus taught",
+      "Miracles",
+      "Galilee"
+    ]
+  },
+  {
+    "name": "Jericho",
+    "hints": [
+      "Walls fell",
+      "Joshua",
+      "Rahab"
+    ]
+  },
+  {
+    "name": "Mount Sinai",
+    "hints": [
+      "Ten Commandments",
+      "God spoke",
+      "Wilderness"
+    ]
+  },
+  {
+    "name": "Mount Carmel",
+    "hints": [
+      "Elijah",
+      "Prophets of Baal",
+      "Fire from heaven"
+    ]
+  },
+  {
+    "name": "Galilee",
+    "hints": [
+      "Jesus' ministry",
+      "Sea",
+      "Fishermen"
+    ]
+  },
+  {
+    "name": "Golgotha",
+    "hints": [
+      "Crucifixion",
+      "Jesus died",
+      "Skull"
+    ]
+  },
+  {
+    "name": "Gethsemane",
+    "hints": [
+      "Jesus prayed",
+      "Agony",
+      "Arrest"
+    ]
+  },
+  {
+    "name": "Jordan River",
+    "hints": [
+      "Baptism",
+      "Crossed over",
+      "John"
+    ]
+  },
+  {
+    "name": "Red Sea",
+    "hints": [
+      "Moses",
+      "Parted",
+      "Exodus"
+    ]
+  },
+  {
+    "name": "Egypt",
+    "hints": [
+      "Slavery",
+      "Pharaoh",
+      "Plagues"
+    ]
+  },
+  {
+    "name": "Babylon",
+    "hints": [
+      "Exile",
+      "Daniel",
+      "Nebuchadnezzar"
+    ]
+  },
+  {
+    "name": "Nineveh",
+    "hints": [
+      "Jonah",
+      "Repentance",
+      "Capital of Assyria"
+    ]
+  },
+  {
+    "name": "Hebron",
+    "hints": [
+      "Abraham",
+      "David reigned",
+      "Tombs"
+    ]
+  },
+  {
+    "name": "Beersheba",
+    "hints": [
+      "Well",
+      "Patriarchs",
+      "Southern border"
+    ]
+  },
+  {
+    "name": "Samaria",
+    "hints": [
+      "Northern kingdom",
+      "Woman at well",
+      "Capital"
+    ]
+  },
+  {
+    "name": "Damascus",
+    "hints": [
+      "Paul's conversion",
+      "Syria",
+      "Old city"
+    ]
+  },
+  {
+    "name": "Antioch",
+    "hints": [
+      "First called Christians",
+      "Missionary base",
+      "Paul"
+    ]
+  },
+  {
+    "name": "Patmos",
+    "hints": [
+      "Revelation",
+      "John",
+      "Island exile"
+    ]
+  },
+  {
+    "name": "Philippi",
+    "hints": [
+      "Paul",
+      "Lydia",
+      "Jailer"
+    ]
+  },
+  {
+    "name": "Corinth",
+    "hints": [
+      "Paul",
+      "Letters",
+      "Immorality"
+    ]
+  },
+  {
+    "name": "Ephesus",
+    "hints": [
+      "Temple of Artemis",
+      "Paul",
+      "Church"
+    ]
+  },
+  {
+    "name": "Thessalonica",
+    "hints": [
+      "Paul",
+      "Letters",
+      "Church"
+    ]
+  },
+  {
+    "name": "Lystra",
+    "hints": [
+      "Paul stoned",
+      "Timothy",
+      "Miracle"
+    ]
+  },
+  {
+    "name": "Derbe",
+    "hints": [
+      "Paul",
+      "Missionary journey",
+      "Asia Minor"
+    ]
+  },
+  {
+    "name": "Tyre",
+    "hints": [
+      "Phoenicia",
+      "Jesus visited",
+      "Prophets"
+    ]
+  },
+  {
+    "name": "Sidon",
+    "hints": [
+      "Coastal city",
+      "Jesus",
+      "Gentiles"
+    ]
+  },
+  {
+    "name": "Bethany",
+    "hints": [
+      "Lazarus",
+      "Mary and Martha",
+      "Jesus visited"
+    ]
+  },
+  {
+    "name": "Emmaus",
+    "hints": [
+      "Resurrected Jesus",
+      "Two disciples",
+      "Journey"
+    ]
+  },
+  {
+    "name": "Mount of Olives",
+    "hints": [
+      "Jesus ascended",
+      "Gethsemane",
+      "Prophecy"
+    ]
+  },
+  {
+    "name": "Shechem",
+    "hints": [
+      "Covenant",
+      "Jacob",
+      "Joshua"
+    ]
+  },
+  {
+    "name": "Shiloh",
+    "hints": [
+      "Tabernacle",
+      "Eli",
+      "Samuel"
+    ]
+  },
+  {
+    "name": "Ai",
+    "hints": [
+      "Israel defeated",
+      "Sin",
+      "Joshua"
+    ]
+  },
+  {
+    "name": "Bethel",
+    "hints": [
+      "Jacob's dream",
+      "Altar",
+      "Northern worship"
+    ]
+  },
+  {
+    "name": "Zion",
+    "hints": [
+      "Jerusalem",
+      "Mount",
+      "God's dwelling"
+    ]
+  },
+  {
+    "name": "Sodom",
+    "hints": [
+      "Destroyed",
+      "Lot",
+      "Sinful"
+    ]
+  },
+  {
+    "name": "Gomorrah",
+    "hints": [
+      "Destroyed",
+      "Judgment",
+      "Fire"
+    ]
+  },
+  {
+    "name": "Ararat",
+    "hints": [
+      "Noah's Ark",
+      "Mountains",
+      "Rested"
+    ]
+  },
+  {
+    "name": "Cana",
+    "hints": [
+      "Water to wine",
+      "Wedding",
+      "Jesus' miracle"
+    ]
+  },
+  {
+    "name": "Caesarea",
+    "hints": [
+      "Roman capital",
+      "Cornelius",
+      "Paul's trial"
+    ]
+  },
+  {
+    "name": "Tarsus",
+    "hints": [
+      "Paul's birthplace",
+      "Asia Minor",
+      "Roman citizen"
+    ]
+  },
+  {
+    "name": "Joppa",
+    "hints": [
+      "Peter's vision",
+      "Jonah fled",
+      "Seaport"
+    ]
+  },
+  {
+    "name": "Laodicea",
+    "hints": [
+      "Lukewarm",
+      "Revelation",
+      "Seven churches"
+    ]
+  },
+  {
+    "name": "Pergamum",
+    "hints": [
+      "Throne of Satan",
+      "Revelation",
+      "Seven churches"
+    ]
+  },
+  {
+    "name": "Smyrna",
+    "hints": [
+      "Persecuted church",
+      "Revelation",
+      "Seven churches"
+    ]
+  },
+  {
+    "name": "Philadelphia",
+    "hints": [
+      "Open door",
+      "Revelation",
+      "Seven churches"
+    ]
+  },
+  {
+    "name": "Colossae",
+    "hints": [
+      "Paul's letter",
+      "Asia Minor",
+      "Church"
+    ]
+  },
+  {
+    "name": "Adam",
+    "hints": [
+      "First man",
+      "Eden",
+      "Eve's husband"
+    ]
+  },
+  {
+    "name": "Eve",
+    "hints": [
+      "First woman",
+      "Eden",
+      "Ate fruit"
+    ]
+  },
+  {
+    "name": "Noah",
+    "hints": [
+      "Ark builder",
+      "Flood",
+      "Rainbow"
+    ]
+  },
+  {
+    "name": "Abraham",
+    "hints": [
+      "Father of nations",
+      "Isaac",
+      "Faithful"
+    ]
+  },
+  {
+    "name": "Sarah",
+    "hints": [
+      "Abraham's wife",
+      "Isaac's mother",
+      "Old age"
+    ]
+  },
+  {
+    "name": "Isaac",
+    "hints": [
+      "Abraham's son",
+      "Rebekah",
+      "Sacrifice"
+    ]
+  },
+  {
+    "name": "Jacob",
+    "hints": [
+      "Esau's twin",
+      "Israel",
+      "Twelve sons"
+    ]
+  },
+  {
+    "name": "Esau",
+    "hints": [
+      "Jacob's twin",
+      "Sold birthright",
+      "Hunter"
+    ]
+  },
+  {
+    "name": "Joseph",
+    "hints": [
+      "Dreamer",
+      "Egypt",
+      "Brothers sold"
+    ]
+  },
+  {
+    "name": "Moses",
+    "hints": [
+      "Red Sea",
+      "Lawgiver",
+      "Burning bush"
+    ]
+  },
+  {
+    "name": "Aaron",
+    "hints": [
+      "Moses' brother",
+      "First priest",
+      "Spokesman"
+    ]
+  },
+  {
+    "name": "Miriam",
+    "hints": [
+      "Moses' sister",
+      "Prophetess",
+      "Song of victory"
+    ]
+  },
+  {
+    "name": "Joshua",
+    "hints": [
+      "Jericho",
+      "Leader",
+      "Successor of Moses"
+    ]
+  },
+  {
+    "name": "Rahab",
+    "hints": [
+      "Jericho spy",
+      "Red cord",
+      "Saved family"
+    ]
+  },
+  {
+    "name": "Gideon",
+    "hints": [
+      "300 men",
+      "Judge",
+      "Fleece"
+    ]
+  },
+  {
+    "name": "Deborah",
+    "hints": [
+      "Judge",
+      "Prophetess",
+      "Barak"
+    ]
+  },
+  {
+    "name": "Samson",
+    "hints": [
+      "Nazirite",
+      "Delilah",
+      "Strong"
+    ]
+  },
+  {
+    "name": "Ruth",
+    "hints": [
+      "Moabite",
+      "Boaz",
+      "Loyal"
+    ]
+  },
+  {
+    "name": "Samuel",
+    "hints": [
+      "Prophet",
+      "Anointed kings",
+      "Hannah's son"
+    ]
+  },
+  {
+    "name": "Saul",
+    "hints": [
+      "First king",
+      "Disobedient",
+      "Rejected"
+    ]
+  },
+  {
+    "name": "David",
+    "hints": [
+      "Goliath",
+      "King",
+      "Psalms"
+    ]
+  },
+  {
+    "name": "Solomon",
+    "hints": [
+      "Wise",
+      "Temple",
+      "Rich"
+    ]
+  },
+  {
+    "name": "Elijah",
+    "hints": [
+      "Prophet",
+      "Mount Carmel",
+      "Fire from heaven"
+    ]
+  },
+  {
+    "name": "Elisha",
+    "hints": [
+      "Miracles",
+      "Successor",
+      "Bald head"
+    ]
+  },
+  {
+    "name": "Isaiah",
+    "hints": [
+      "Prophet",
+      "Messiah",
+      "Vision"
+    ]
+  },
+  {
+    "name": "Jeremiah",
+    "hints": [
+      "Weeping prophet",
+      "Lamentations",
+      "Judah"
+    ]
+  },
+  {
+    "name": "Ezekiel",
+    "hints": [
+      "Dry bones",
+      "Visions",
+      "Exile"
+    ]
+  },
+  {
+    "name": "Daniel",
+    "hints": [
+      "Lion's den",
+      "Interpreter",
+      "Faithful"
+    ]
+  },
+  {
+    "name": "Shadrach",
+    "hints": [
+      "Fiery furnace",
+      "Faithful",
+      "Babylon"
+    ]
+  },
+  {
+    "name": "Meshach",
+    "hints": [
+      "Fiery furnace",
+      "Faithful",
+      "Babylon"
+    ]
+  },
+  {
+    "name": "Abednego",
+    "hints": [
+      "Fiery furnace",
+      "Faithful",
+      "Babylon"
+    ]
+  },
+  {
+    "name": "Jonah",
+    "hints": [
+      "Big fish",
+      "Nineveh",
+      "Ran away"
+    ]
+  },
+  {
+    "name": "Mary",
+    "hints": [
+      "Jesus' mother",
+      "Virgin",
+      "Nazareth"
+    ]
+  },
+  {
+    "name": "Joseph (NT)",
+    "hints": [
+      "Mary's husband",
+      "Dreams",
+      "Carpenter"
+    ]
+  },
+  {
+    "name": "John the Baptist",
+    "hints": [
+      "Baptizer",
+      "Desert",
+      "Camel hair"
+    ]
+  },
+  {
+    "name": "Peter",
+    "hints": [
+      "Disciple",
+      "Denied Jesus",
+      "Rock"
+    ]
+  },
+  {
+    "name": "James",
+    "hints": [
+      "Apostle",
+      "Jesus' brother",
+      "Early church"
+    ]
+  },
+  {
+    "name": "John",
+    "hints": [
+      "Beloved disciple",
+      "Revelation",
+      "Gospel writer"
+    ]
+  },
+  {
+    "name": "Judas Iscariot",
+    "hints": [
+      "Betrayed Jesus",
+      "Thirty silver",
+      "Disciple"
+    ]
+  },
+  {
+    "name": "Thomas",
+    "hints": [
+      "Doubted",
+      "Disciple",
+      "Resurrected Jesus"
+    ]
+  },
+  {
+    "name": "Mary Magdalene",
+    "hints": [
+      "Follower",
+      "Resurrection",
+      "Healed"
+    ]
+  },
+  {
+    "name": "Martha",
+    "hints": [
+      "Mary's sister",
+      "Bethany",
+      "Busy"
+    ]
+  },
+  {
+    "name": "Lazarus",
+    "hints": [
+      "Raised",
+      "Bethany",
+      "Jesus' friend"
+    ]
+  },
+  {
+    "name": "Zacchaeus",
+    "hints": [
+      "Tax collector",
+      "Sycamore tree",
+      "Repented"
+    ]
+  },
+  {
+    "name": "Stephen",
+    "hints": [
+      "First martyr",
+      "Stoned",
+      "Deacon"
+    ]
+  },
+  {
+    "name": "Philip",
+    "hints": [
+      "Evangelist",
+      "Ethiopian eunuch",
+      "Apostle"
+    ]
+  },
+  {
+    "name": "Paul",
+    "hints": [
+      "Apostle",
+      "Epistles",
+      "Missionary"
+    ]
+  },
+  {
+    "name": "Barnabas",
+    "hints": [
+      "Encourager",
+      "Paul's partner",
+      "Missionary"
+    ]
+  },
+  {
+    "name": "Timothy",
+    "hints": [
+      "Young pastor",
+      "Paul's disciple",
+      "Faithful"
+    ]
+  }
+]
