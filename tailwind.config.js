@@ -6,7 +6,6 @@ module.exports = {
     "./bibleVersePuzzle/**/*.{js,jsx,ts,tsx}",
     "./guessTheVerse/**/*.{js,jsx,ts,tsx}",
     "./reviews/**/*.{js,jsx,ts,tsx}",
-    "./components/**/*.{js,jsx,ts,tsx}",
   ],
   presets: [require("nativewind/preset")],
   theme: {

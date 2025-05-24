@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, Pressable, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Image, ImageBackground, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import characters from '../characters.json';
 import BottomSheet from '../components/BottomSheet';
-import { Ionicons } from '@expo/vector-icons';
 
 const GuessTheVerse = () => {
   const [allCharacters, setAllCharacters] = useState<typeof characters>([]);
