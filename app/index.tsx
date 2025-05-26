@@ -125,13 +125,13 @@ const HomeScreen = () => {
           </View>
           <View className="flex-row items-center">
             <Text
-              className={`text-lg font-pmedium mr-2 ${
+              className={`text-3xl font-pblack mr-2 ${
                 isDark ? "text-dark-textPrimary" : "text-light-textPrimary"
               }`}
             >
-              Level {userLevel || 1}
+              BIBLE GAME
             </Text>
-            <View className="bg-purpleGradientStart bg-opacity-20 px-2 py-1 rounded-md">
+            {/* <View className="bg-purpleGradientStart bg-opacity-20 px-2 py-1 rounded-md">
               <Text className="text-purpleGradientStart text-xs font-pmedium">
                 {userLevel >= 10
                   ? "Advanced"
@@ -139,7 +139,7 @@ const HomeScreen = () => {
                   ? "Intermediate"
                   : "Beginner"}
               </Text>
-            </View>
+            </View> */}
           </View>
         </View>
 
@@ -169,7 +169,7 @@ const HomeScreen = () => {
         <GameCard
           title="Bible Verse Puzzle"
           description="Rearrange fragments to complete Bible verses"
-          difficulty="Easy to Hard"
+          difficulty="Not specified"
           icon={
             <Ionicons name="extension-puzzle-outline" size={24} color="white" />
           }
@@ -186,7 +186,7 @@ const HomeScreen = () => {
         <GameCard
           title="Guess the Character"
           description="Identify Bible characters and places from clues"
-          difficulty="Medium to Hard"
+          difficulty="Not specified"
           icon={<Ionicons name="search" size={24} color="white" />}
           variant="blue"
           stats={{

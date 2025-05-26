@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Puzzle",
-    "slug": "Puzzle",
+    "name": "Bible Game",
+    "slug": "Bible Game",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -17,7 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.faithfulisuh.Puzzle"
+      "package": "com.faithfulisuh.BibleGame"
     },
     "web": {
       "bundler": "metro",
