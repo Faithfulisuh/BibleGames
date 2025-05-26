@@ -3,7 +3,27 @@ import { SplashScreen, Stack } from "expo-router";
 import React, { Suspense, useEffect } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+import { ThemeProvider, useTheme } from "../lib/ThemeContext";
+import { ReviewsProvider } from "../lib/ReviewsContext";
+import { GameProgressProvider } from "../lib/GameProgressContext";
 import "../global.css";
+
+// Keep splash screen visible until fonts are loaded
+SplashScreen.preventAutoHideAsync();
+
+// Main content component that uses the theme
+function MainContent({ children }: { children: React.ReactNode }) {
+  const { isDark } = useTheme();
+  
+  return (
+    <View className={`flex-1 ${isDark ? 'bg-dark-background' : 'bg-light-background'}`}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
+      {children}
+    </View>
+  );
+}
 
 // RootLayout component serves as the main layout for the application
 const RootLayout: React.FC = () => {
@@ -20,29 +40,46 @@ const RootLayout: React.FC = () => {
   });
 
   useEffect(() => {
-    if (error) throw error; // Handle font loading error
+    async function prepare() {
+      if (error) throw error; // Handle font loading error
 
-    if (fontsLoaded) SplashScreen.hideAsync(); // Hide splash screen when fonts are loaded
+      if (fontsLoaded) {
+        // Hide splash screen when fonts are loaded
+        await SplashScreen.hideAsync();
+      }
+    }
+    
+    prepare();
   }, [fontsLoaded, error]);
 
   if (!fontsLoaded && !error) return null; // Render nothing while fonts are loading
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Suspense
-        fallback={
-          <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size={"large"} />
-            <Text>Loading Database...</Text>
-          </View>
-        }
-      >
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          {/* <Stack.Screen name="BibleVersePuzzle" /> */}
-        </Stack>
-      </Suspense>
-    </GestureHandlerRootView>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <GameProgressProvider>
+          <ReviewsProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <MainContent>
+                <Suspense
+                  fallback={
+                    <View className="flex-1 items-center justify-center">
+                      <ActivityIndicator size={"large"} />
+                      <Text>Loading Database...</Text>
+                    </View>
+                  }
+                >
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="index" />
+                    {/* <Stack.Screen name="BibleVersePuzzle" /> */}
+                  </Stack>
+                </Suspense>
+              </MainContent>
+            </GestureHandlerRootView>
+          </ReviewsProvider>
+        </GameProgressProvider>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 };
 
