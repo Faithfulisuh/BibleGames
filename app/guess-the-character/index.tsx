@@ -186,33 +186,52 @@ export default function GuessTheCharacterScreen() {
     return gameLevels[Math.min(currentLevel - 1, gameLevels.length - 1)];
   };
   
-  // Load saved progress and initialize the game
+  // Load progress from AsyncStorage
   useEffect(() => {
     const loadProgress = async () => {
       try {
-        // Load from AsyncStorage first (for used characters)
-        const storedProgress = await AsyncStorage.getItem(STORAGE_KEY);
-        if (storedProgress) {
-          const parsedProgress = JSON.parse(storedProgress);
-          setUsedCharacters(parsedProgress.usedCharacters || []);
+        // Load saved progress from AsyncStorage
+        const savedProgressString = await AsyncStorage.getItem(STORAGE_KEY);
+        
+        if (savedProgressString) {
+          const savedData = JSON.parse(savedProgressString);
+          setUsedCharacters(savedData.usedCharacters || []);
+          
+          // Restore the current character and game state if available
+          if (savedData.currentCharacter) {
+            console.log('Restoring saved character:', savedData.currentCharacter.name);
+            setCurrentCharacter(savedData.currentCharacter);
+            setCurrentLevel(savedData.currentLevel || 1);
+            setHintsUsed(savedData.hintsUsed || 0);
+            setRevealedHints(savedData.revealedHints || 0);
+            setScore(savedData.score || 0);
+            setTotalScore(savedData.totalScore || 0);
+            
+            // Set game state to playing with the saved character
+            setGameState(GameState.PLAYING);
+          } else {
+            console.log('No saved character found, starting new round');
+            // Start a new round if no current character is saved
+            startNewRound();
+            setGameState(GameState.PLAYING);
+          }
+        } else {
+          console.log('No saved progress found, loading from context');
+          // Load game progress from context
+          const savedProgress = getProgress('Guess the Character');
+          if (savedProgress) {
+            setCurrentLevel(savedProgress.level);
+            setTotalScore(savedProgress.score);
+            setAchievements(savedProgress.achievements);
+            setCompletedLevels(savedProgress.completedLevels);
+          }
+          
+          // Start a new round with the saved level
+          startNewRound();
+          
+          // Set game state to playing after loading
+          setGameState(GameState.PLAYING);
         }
-        
-        // Get saved progress from GameProgressContext
-        const savedProgress = getProgress('Guess the Character');
-        
-        if (savedProgress) {
-          // Restore game state from saved progress
-          setCurrentLevel(savedProgress.level);
-          setTotalScore(savedProgress.score);
-          setAchievements(savedProgress.achievements);
-          setCompletedLevels(savedProgress.completedLevels);
-        }
-        
-        // Start a new round with the saved level
-        startNewRound();
-        
-        // Set game state to playing after loading
-        setGameState(GameState.PLAYING);
       } catch (error) {
         console.error('Error loading game progress:', error);
         // Start a new game if there's an error
@@ -229,6 +248,12 @@ export default function GuessTheCharacterScreen() {
     try {
       const progressData = {
         usedCharacters,
+        currentCharacter,
+        currentLevel,
+        hintsUsed,
+        revealedHints,
+        score,
+        totalScore,
         lastPlayed: new Date().toISOString()
       };
       
@@ -238,22 +263,26 @@ export default function GuessTheCharacterScreen() {
     }
   };
   
-  // Save progress when used characters change
+  // Save progress when game state changes
   useEffect(() => {
-    if (usedCharacters.length > 0) {
+    if (currentCharacter && gameState === GameState.PLAYING) {
       saveProgress();
     }
-  }, [usedCharacters]);
+  }, [currentCharacter, hintsUsed, revealedHints, score, totalScore, currentLevel, usedCharacters]);
   
-  // Start a new round when level changes
+  // Only start a new round when level changes AND we're not restoring from saved state
+  // This is commented out to prevent overriding the saved character when returning to the game
+  /*
   useEffect(() => {
     if (gameState !== GameState.LOADING) {
       startNewRound();
     }
   }, [currentLevel]);
+  */
   
   // Start a new round
   const startNewRound = () => {
+    console.log('Starting new round');
     const levelData = getCurrentLevelData();
     
     // Use characters from the JSON file instead of hardcoded array
@@ -286,6 +315,7 @@ export default function GuessTheCharacterScreen() {
     
     // Set the current character
     setCurrentCharacter(selectedCharacter);
+    console.log('New character selected:', selectedCharacter.name);
     
     // Reset game state
     setUserAnswer('');
@@ -297,6 +327,12 @@ export default function GuessTheCharacterScreen() {
     // Calculate max points based on level
     const maxPoints = levelData.pointsPerCorrect;
     setScore(maxPoints);
+    
+    // Save the new character immediately
+    setTimeout(() => {
+      saveProgress();
+      console.log('New character saved to AsyncStorage');
+    }, 100);
   };
   
   // Handle hint reveal
@@ -412,6 +448,9 @@ export default function GuessTheCharacterScreen() {
       completedLevels: completedLevels,
       achievements: achievements,
     });
+    
+    // Save the new character and game state
+    saveProgress();
   };
   
   // Handle next level
@@ -463,7 +502,11 @@ export default function GuessTheCharacterScreen() {
         >
           <View className="flex-row items-center mb-2">
             <Pressable 
-              onPress={() => router.back()}
+              onPress={() => {
+                // Save state before navigating back
+                saveProgress();
+                router.back();
+              }}
               className="mr-2"
             >
               <Ionicons name="chevron-back" size={24} color="white" />

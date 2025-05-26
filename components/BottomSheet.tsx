@@ -35,7 +35,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
           useNativeDriver: true,
         }),
         Animated.timing(backdropOpacity, {
-          toValue: 0.5,
+          toValue: 0.7,
           duration: 300,
           useNativeDriver: true,
         }),
@@ -90,15 +90,15 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
       
       <Animated.View
         style={{ transform: [{ translateY: slideAnim }] }}
-        className={`bg-cardBg rounded-t-3xl px-5 pt-6 pb-10 shadow-lg border-t-4 ${borderColor}`}
+        className={`bg-white rounded-t-3xl px-5 pt-6 pb-10 shadow-lg border-t-4 ${borderColor}`}
       >
         <View className="flex-row items-center mb-4">
           <Text className="text-3xl mr-2">{icon}</Text>
-          <Text className="text-2xl font-pbold text-textDark flex-1">{title}</Text>
+          <Text className="text-2xl font-pbold text-textPrimary flex-1">{title}</Text>
         </View>
         
         {message && (
-          <Text className="text-base text-textMedium mb-6">{message}</Text>
+          <Text className="text-lg text-textPrimary mb-6">{message}</Text>
         )}
         
         <View className="flex-row justify-end space-x-3">
@@ -108,7 +108,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
               onPress={action.onPress}
               className={`px-5 py-3 rounded-xl ${action.primary ? bgColor : 'bg-gray-200'}`}
             >
-              <Text className={`font-pbold ${action.primary ? 'text-white' : 'text-textDark'}`}>
+              <Text className={`font-pbold text-textDark`}>
                 {action.text}
               </Text>
             </Pressable>
