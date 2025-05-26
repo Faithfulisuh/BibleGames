@@ -25,7 +25,7 @@ export default function ChapterSelector({
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <View className="p-4 flex-row items-center border-b border-lightGray border-opacity-10">
+      <View className="mt-7 p-4 flex-row items-center border-b border-lightGray border-opacity-10">
         <Pressable onPress={onBack} className="mr-3">
           <Ionicons name="chevron-back" size={24} color="#374151" />
         </Pressable>
