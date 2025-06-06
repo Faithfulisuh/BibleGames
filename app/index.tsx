@@ -8,18 +8,20 @@ import GameCard from "../components/GameCard";
 import ProgressIndicator from "../components/ProgressIndicator";
 import ThemeToggle from "../components/ThemeToggle";
 import { useGameProgress } from "../lib/GameProgressContext";
+import { useGameState } from "../lib/gameState"; // Added import for game state
 import { useTheme } from "../lib/ThemeContext";
 import { useResponsive } from "../lib/useResponsive";
 
+import AppwritePing from '../components/AppwritePing';
+
 // Game selection enum
 enum GAMES {
-  BIBLE_VERSE_PUZZLE = "bible_verse_puzzle",
+  MATCH_THE_VERSE = "match-the-verse",
   GUESS_THE_CHARACTER = "guess_the_character",
   REVIEWS = "reviews",
 }
 
 // DailyChallenge component for the home screen
-
 const DailyChallenge: React.FC<{
   verse: string;
   timeLeft: string;
@@ -67,6 +69,7 @@ const HomeScreen = () => {
   const { isDark } = useTheme();
   const { isPhone, isTablet } = useResponsive();
   const { progress } = useGameProgress();
+  const { gameData } = useGameState(); // Added gameState hook
   const userLevel = progress["Guess the Character"]?.level || 1;
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [bottomSheetContent, setBottomSheetContent] = useState({
@@ -78,8 +81,8 @@ const HomeScreen = () => {
   // Handle game selection
   const handleGameSelect = (gameId: string) => {
     switch (gameId) {
-      case "bible-verse-puzzle":
-        router.push("/bible-verse-puzzle");
+      case "match-the-verse":
+        router.push("/match-the-verse");
         break;
       case "guess-the-character":
         router.push("/guess-the-character");
@@ -125,11 +128,11 @@ const HomeScreen = () => {
           </View>
           <View className="flex-row items-center">
             <Text
-              className={`text-3xl font-pblack mr-2 ${
+              className={`text-2xl font-pblack mr-2 ${
                 isDark ? "text-dark-textPrimary" : "text-light-textPrimary"
               }`}
             >
-              BIBLE GAME
+              Word Bits
             </Text>
             {/* <View className="bg-purpleGradientStart bg-opacity-20 px-2 py-1 rounded-md">
               <Text className="text-purpleGradientStart text-xs font-pmedium">
@@ -147,6 +150,10 @@ const HomeScreen = () => {
           <ThemeToggle />
         </View>
       </View>
+      <View>
+      		<AppwritePing />
+      </View>
+
 
       <ScrollView className="flex-1 px-4">
         {/* Daily Challenge */}
@@ -165,21 +172,22 @@ const HomeScreen = () => {
           Choose Your Game
         </Text>
 
-        {/* Bible Verse Puzzle */}
+        {/* Match the Verse */}
         <GameCard
-          title="Bible Verse Puzzle"
-          description="Rearrange fragments to complete Bible verses"
+          title="Match the Verse"
+          description="Match each card to their corresponding verses"
           difficulty="Not specified"
           icon={
             <Ionicons name="extension-puzzle-outline" size={24} color="white" />
           }
           variant="purple"
           stats={{
-            played:
-              progress["Bible Verse Puzzle"]?.completedLevels?.length || 0,
-            level: progress["Bible Verse Puzzle"]?.level || 1,
+            // played: gameData.totalScore || 0, // Using totalScore as played games indicator
+            level: gameData.level || 1, // Using level from gameData
+            score: gameData.totalScore || 0, // Adding score stat
+            streak: gameData.streak || 0, // Adding streak stat
           }}
-          onPress={() => router.push({ pathname: "bible-verse-puzzle" } as any)}
+          onPress={() => router.push({ pathname: "match-the-verse" } as any)}
         />
 
         {/* Guess the Character */}

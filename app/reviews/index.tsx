@@ -7,7 +7,7 @@ import { useTheme } from '../../lib/ThemeContext';
 import { useReviews, Review } from '../../lib/ReviewsContext';
 
 // Filter options for reviews
-type FilterOption = 'all' | 'Bible Verse Puzzle' | 'Guess the Character';
+type FilterOption = 'all' | 'Match the Verse' | 'Guess the Character';
 
 // Star Rating component
 const StarRating: React.FC<{ rating: number; setRating?: (rating: number) => void; size?: number; interactive?: boolean }> = ({ 
@@ -113,7 +113,7 @@ export default function ReviewsScreen() {
   const [userName, setUserName] = useState('');
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
-  const [gameType, setGameType] = useState<Review['gameType']>('Bible Verse Puzzle');
+  const [gameType, setGameType] = useState<Review['gameType']>('Match the Verse');
   
   // State for filtering reviews
   const [filter, setFilter] = useState<FilterOption>('all');
@@ -149,7 +149,7 @@ export default function ReviewsScreen() {
     setUserName('');
     setRating(5);
     setComment('');
-    setGameType('Bible Verse Puzzle');
+    setGameType('Match the Verse');
     setIsModalVisible(false);
   };
   
@@ -195,9 +195,9 @@ export default function ReviewsScreen() {
             onPress={() => setFilter('all')} 
           />
           <FilterButton 
-            title="Bible Verse Puzzle" 
-            isActive={filter === 'Bible Verse Puzzle'} 
-            onPress={() => setFilter('Bible Verse Puzzle')} 
+            title="Match the Verse" 
+            isActive={filter === 'Match the Verse'} 
+            onPress={() => setFilter('Match the Verse')} 
           />
           <FilterButton 
             title="Guess the Character" 
@@ -284,15 +284,15 @@ export default function ReviewsScreen() {
             </Text>
             <View className="flex-row mb-4">
               <Pressable
-                onPress={() => setGameType('Bible Verse Puzzle')}
-                className={`flex-1 p-3 rounded-lg mr-2 ${gameType === 'Bible Verse Puzzle' 
+                onPress={() => setGameType('Match the Verse')}
+                className={`flex-1 p-3 rounded-lg mr-2 ${gameType === 'Match the Verse' 
                   ? 'bg-purpleGradientStart' 
                   : isDark 
                     ? 'bg-dark-background' 
                     : 'bg-lightGray'}`}
               >
-                <Text className={`text-center ${gameType === 'Bible Verse Puzzle' ? 'text-white font-pbold' : isDark ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>
-                  Bible Verse Puzzle
+                <Text className={`text-center ${gameType === 'Match the Verse' ? 'text-white font-pbold' : isDark ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>
+                  Match the Verse
                 </Text>
               </Pressable>
               <Pressable

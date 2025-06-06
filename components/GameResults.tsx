@@ -7,7 +7,7 @@ import ProgressIndicator from "./ProgressIndicator";
 import ScoreDisplay from "./ScoreDisplay";
 
 interface GameResultsProps {
-  gameType: "Bible Verse Puzzle" | "Guess the Verse" | "Guess the Character";
+  gameType: "Match the Verse" | "Guess the Character";
   level?: number;
   reference?: string;
   verseText?: string;
@@ -54,10 +54,8 @@ export default function GameResults({
   // Determine the background gradient based on game type
   const getGameGradient = () => {
     switch (gameType) {
-      case "Bible Verse Puzzle":
+      case "Match the Verse":
         return "purple";
-      case "Guess the Verse":
-        return "blue";
       case "Guess the Character":
         return "blue";
       default:
@@ -66,7 +64,7 @@ export default function GameResults({
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-white space-y-4">
       {/* Header */}
       <View className="bg-white p-4 flex-row items-center justify-between">
         <Pressable onPress={onHome}>
@@ -256,7 +254,7 @@ export default function GameResults({
             />
           </View>
         </View>
-        
+
         {/* Inspirational verse */}
         {inspirationalVerse && (
           <View className="mt-6 mb-4">

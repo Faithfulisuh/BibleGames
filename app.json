@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Bible Game",
-    "slug": "Bible Game",
+    "name": "Word Bits",
+    "slug": "Word Bits",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -17,7 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.faithfulisuh.BibleGame"
+      "package": "com.faithfulisuh.WordBits"
     },
     "web": {
       "bundler": "metro",
