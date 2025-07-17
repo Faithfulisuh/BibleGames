@@ -5,9 +5,6 @@ import { ActivityIndicator, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { ThemeProvider, useTheme } from "../lib/ThemeContext";
-import { ReviewsProvider } from "../lib/ReviewsContext";
-import { GameProgressProvider } from "../lib/GameProgressContext";
 import "../global.css";
 
 // Keep splash screen visible until fonts are loaded
