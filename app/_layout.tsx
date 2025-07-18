@@ -1,10 +1,13 @@
+import { GameProgressProvider } from "@/lib/GameProgressContext";
+import { ReviewsProvider } from "@/lib/ReviewsContext";
+import { ThemeProvider, useTheme } from "@/lib/ThemeContext";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { Suspense, useEffect } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
 import "../global.css";
 
 // Keep splash screen visible until fonts are loaded
