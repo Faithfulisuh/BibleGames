@@ -1,18 +1,19 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Account, Client } from "appwrite";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import BottomSheet from "../components/BottomSheet";
 import GameCard from "../components/GameCard";
 import ProgressIndicator from "../components/ProgressIndicator";
 import ThemeToggle from "../components/ThemeToggle";
+import { config, logout } from "../lib/appwrite";
 import { useGameProgress } from "../lib/GameProgressContext";
 import { useGameState } from "../lib/gameState"; // Added import for game state
 import { useTheme } from "../lib/ThemeContext";
 import { useResponsive } from "../lib/useResponsive";
 
-import AppwritePing from '../components/AppwritePing';
 
 // Game selection enum
 enum GAMES {
@@ -77,6 +78,19 @@ const HomeScreen = () => {
     message: "",
     type: "info" as "success" | "error" | "info",
   });
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // default to not logged in
+
+  // Appwrite session check
+  useEffect(() => {
+    const client = new Client();
+    client.setEndpoint(config.endpoint).setProject(config.projectId);
+    const account = new Account(client);
+    account.get().then(
+      () => setIsLoggedIn(true),
+      () => setIsLoggedIn(false)
+    );
+  }, []);
+
 
   // Handle game selection
   const handleGameSelect = (gameId: string) => {
@@ -114,6 +128,30 @@ const HomeScreen = () => {
     setBottomSheetVisible(true);
   };
 
+  const handleAuth = async () => {
+    if (isLoggedIn) {
+      // Logout
+      try {
+        await logout();
+        // Re-check session to ensure it's closed
+        const client = new Client();
+        client.setEndpoint(config.endpoint).setProject(config.projectId);
+        const account = new Account(client);
+        try {
+          await account.get();
+          setIsLoggedIn(true); // still logged in
+        } catch {
+          setIsLoggedIn(false); // session closed
+        }
+      } catch (error) {
+        // Optionally show error
+      }
+    } else {
+      // Login (navigate to sign-in)
+      router.replace('/(auth)/sign-in');
+    }
+  };
+
   return (
     <View
       className={`flex-1 ${
@@ -146,23 +184,22 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        <View className="flex-row items-center">
+        <View className="flex-row items-center gap-x-1">
           <ThemeToggle />
+          <TouchableOpacity onPress={handleAuth}>
+            <Text className="font-psemibold text-blue-600">{isLoggedIn ? 'Logout' : 'Login'}</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      <View>
-      		<AppwritePing />
-      </View>
-
 
       <ScrollView className="flex-1 px-4">
-        {/* Daily Challenge */}
+        {/* Daily Challenge
         <DailyChallenge
           verse="In the beginning God created the heavens and the earth..."
           timeLeft="8h 23m"
           percentComplete={progress["Daily Challenge"]?.percentComplete || 0}
           onPress={handleDailyChallenge}
-        />
+        /> */}
 
         <Text
           className={`text-xl font-pbold mb-4 ${
@@ -184,8 +221,6 @@ const HomeScreen = () => {
           stats={{
             // played: gameData.totalScore || 0, // Using totalScore as played games indicator
             level: gameData.level || 1, // Using level from gameData
-            score: gameData.totalScore || 0, // Adding score stat
-            streak: gameData.streak || 0, // Adding streak stat
           }}
           onPress={() => router.push({ pathname: "match-the-verse" } as any)}
         />

@@ -1,27 +1,37 @@
+import { signIn } from '@/lib/appwrite';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-
   const [loading, setLoading] = useState(false);
-  // TODO: Implement authentication logic here
+
   const handleSignIn = async () => {
+    if (!email || !password) {
+      Alert.alert('Please fill in all fields');
+      return;
+    }
+
     setLoading(true);
+
     try {
-      // await account.createSession(email, password);
-      // Navigate to your app's main screen here
+      await signIn(email, password);
+      router.replace('/'); // Navigates to the root (index) route
     } catch (error) {
-      // Show error to user (implement your own error UI)
+      if (error instanceof Error) {
+        Alert.alert('Error signing in', error.message);
+      } else {
+        Alert.alert('Error signing in', 'An unknown error occurred.');
+      }
     } finally {
       setLoading(false);
     }
   };
+
 
   const handleForgotPassword = () => {
     router.push('/(auth)/forgot-password');
@@ -44,15 +54,15 @@ const SignIn = () => {
                 <View className="mb-2 rounded-full bg-gradient-to-r from-[#A259FF] to-[#3A5BFF] p-3">
                   <Image source={require('../../assets/icons/bookmark.png')} style={{ width: 32, height: 32 }} />
                 </View>
-                <Text className="mb-1 font-bold text-2xl text-darkGray">Bible Games</Text>
-                <Text className="text-center text-xs text-mediumGray">Learn • Play • Grow</Text>
+                <Text className="mb-1 font-pbold text-2xl text-darkGray">Word Bits</Text>
+                <Text className="text-center font-pregular text-xs text-mediumGray">Learn • Play • Grow</Text>
               </View>
               {/* Email Input */}
-              <Text className="mb-1 text-xs font-semibold text-darkGray w-full">Email</Text>
-              <View className="flex-row items-center bg-lightGray rounded-lg border border-light border-solid px-3 h-11 mb-3 w-full">
+              <Text className="mb-1 text-xs font-psemibold text-darkGray w-full">Email</Text>
+              <View className="flex-row items-center bg-lightGray rounded-lg border border-light border-solid px-3 h-16 mb-3 w-full">
                 <Ionicons name="mail-outline" size={18} color="#A259FF" style={{ marginRight: 8 }} />
                 <TextInput
-                  className="flex-1 text-base text-darkGray font-regular"
+                  className="flex-1 text-sm text-darkGray font-pregular"
                   placeholder="Enter your email"
                   placeholderTextColor="#BDBDBD"
                   value={email}
@@ -62,11 +72,11 @@ const SignIn = () => {
                 />
               </View>
               {/* Password Input */}
-              <Text className="mb-1 text-xs font-semibold text-darkGray w-full">Password</Text>
-              <View className="flex-row items-center bg-lightGray rounded-lg border border-light border-solid px-3 h-11 mb-3 w-full">
+              <Text className="mb-1 text-xs font-psemibold text-darkGray w-full">Password</Text>
+              <View className="flex-row items-center bg-lightGray rounded-lg border border-light border-solid px-3 h-16 mb-3 w-full">
                 <Ionicons name="lock-closed-outline" size={18} color="#A259FF" style={{ marginRight: 8 }} />
                 <TextInput
-                  className="flex-1 text-base text-darkGray font-regular"
+                  className="flex-1 text-sm text-darkGray font-pregular"
                   placeholder="Enter your password"
                   placeholderTextColor="#BDBDBD"
                   value={password}
@@ -83,25 +93,25 @@ const SignIn = () => {
                   <View className={`mr-2 h-4 w-4 items-center justify-center rounded border border-light ${rememberMe ? 'bg-[#A259FF]' : 'bg-white'}`}>
                     {rememberMe && <Ionicons name="checkmark" size={12} color="#fff" />}
                   </View>
-                  <Text className="text-xs text-mediumGray">Remember me</Text>
+                  <Text className="text-xs font-pregular text-mediumGray">Remember me</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleForgotPassword}>
-                  <Text className="text-xs font-semibold text-[#A259FF]">Forgot password?</Text>
+                  <Text className="text-xs font-psemibold text-[#A259FF]">Forgot password?</Text>
                 </TouchableOpacity>
               </View>
               {/* Sign In Button */}
               <TouchableOpacity
                 onPress={handleSignIn}
                 disabled={loading}
-                className={`w-full h-11 rounded-lg justify-center items-center mb-4 ${loading ? 'bg-gray-300' : 'bg-[#A259FF]'}`}
+                className={`w-full h-16 rounded-lg justify-center items-center mb-4 ${loading ? 'bg-gray-300' : 'bg-[#A259FF]'}`}
               >
-                <Text className="text-white font-semibold text-base">{loading ? 'Signing In...' : 'Sign In'}</Text>
+                <Text className="text-white font-psemibold text-base">{loading ? 'Signing In...' : 'Sign In'}</Text>
               </TouchableOpacity>
               {/* Sign Up Link */}
               <View className="flex-row items-center justify-center">
-                <Text className="text-sm text-darkGray">Don't have an account?</Text>
+                <Text className="text-sm font-pregular text-darkGray">Don't have an account?</Text>
                 <TouchableOpacity onPress={handleSignUp}>
-                  <Text className="ml-1 font-bold text-[#A259FF] text-sm">Sign Up</Text>
+                  <Text className="ml-1 font-pbold text-[#A259FF] text-sm">Sign Up</Text>
                 </TouchableOpacity>
               </View>
             </View>
