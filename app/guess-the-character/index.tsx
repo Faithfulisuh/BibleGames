@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Account, Client } from "appwrite";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ import {
 } from "react-native";
 import BottomSheet from "../../components/BottomSheet";
 import GameResults from "../../components/GameResults";
+import { config, saveUserProgress } from "../../lib/appwrite";
 import { useGameProgress } from "../../lib/GameProgressContext";
 import { useTheme } from "../../lib/ThemeContext";
 
@@ -145,7 +147,8 @@ export default function GuessTheCharacterScreen() {
     loadProgress();
   }, []);
 
-  // Save progress to AsyncStorage
+
+  // Save progress to AsyncStorage and Appwrite
   const saveProgress = async () => {
     try {
       const progressData = {
@@ -163,7 +166,6 @@ export default function GuessTheCharacterScreen() {
       };
 
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(progressData));
-      
       // Also update the game progress context
       await updateProgress("Guess the Character", {
         level: currentLevel,
@@ -172,6 +174,24 @@ export default function GuessTheCharacterScreen() {
         completedLevels,
         achievements,
       });
+
+      // Save only this game's progress to Appwrite if logged in
+      const client = new Client();
+      client.setEndpoint(config.endpoint).setProject(config.projectId);
+      const account = new Account(client);
+      try {
+        const user = await account.get();
+        await saveUserProgress(user.$id, { "Guess the Character": {
+          level: currentLevel,
+          score: totalScore,
+          hintsUsed,
+          completedLevels,
+          achievements,
+          lastPlayed: new Date().toISOString(),
+        }});
+      } catch (e) {
+        // Not logged in, skip cloud save
+      }
     } catch (error) {
       console.error("Error saving game progress:", error);
     }

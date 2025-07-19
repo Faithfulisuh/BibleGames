@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, Text, View, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Account, Client } from "appwrite";
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import BottomSheet from '../../components/BottomSheet';
 import GameResults from '../../components/GameResults';
 import { useTheme } from '../../lib/ThemeContext';
+import { config, saveUserProgress } from "../../lib/appwrite";
 import { useGameState } from '../../lib/gameState';
 
 // Load JSON data
@@ -57,7 +59,7 @@ const GameScreen: React.FC = () => {
   const { width } = Dimensions.get('window');
   const [contextErrors, setContextErrors] = useState<string[]>([]);
   
-  let router: any = null, isDark = false, gameData = { level: 1, totalScore: 0, streak: 0, matchedVerses: [], achievements: [] }, saveGameData = () => {};
+  let router: any = null, isDark = false, gameData: { level: number; totalScore: number; streak: number; matchedVerses: string[]; achievements: string[] } = { level: 1, totalScore: 0, streak: 0, matchedVerses: [], achievements: [] }, saveGameData: (newData: Partial<{ level: number; totalScore: number; streak: number; matchedVerses: string[]; achievements: string[]; }>) => Promise<void> = async () => {};
   
   try {
     router = useRouter();
@@ -66,7 +68,14 @@ const GameScreen: React.FC = () => {
     gameData = gameState.gameData;
     saveGameData = gameState.saveGameData;
   } catch (error) {
-    setContextErrors(prev => [...prev, `Context Error: ${error.message}`]);
+    setContextErrors(prev => [
+      ...prev,
+      `Context Error: ${
+        typeof error === 'object' && error !== null && 'message' in error
+          ? (error as { message: string }).message
+          : String(error)
+      }`
+    ]);
   }
 
   // Game state
@@ -104,6 +113,24 @@ const GameScreen: React.FC = () => {
         lockedCards, score, streak, matchedCount, gameStartTime,
         lastPlayed: new Date().toISOString(),
       }));
+
+      // Save only this game's progress to Appwrite if logged in
+      const client = new Client();
+      client.setEndpoint(config.endpoint).setProject(config.projectId);
+      const account = new Account(client);
+      try {
+        const user = await account.get();
+        await saveUserProgress(user.$id, { "Match the Verse": {
+          level: gameData.level,
+          score: gameData.totalScore,
+          streak: gameData.streak,
+          matchedVerses: gameData.matchedVerses,
+          achievements: gameData.achievements,
+          lastPlayed: new Date().toISOString(),
+        }});
+      } catch (e) {
+        // Not logged in, skip cloud save
+      }
     } catch (error) {}
   };
 
@@ -117,11 +144,12 @@ const GameScreen: React.FC = () => {
     const gameVerses = selectedRefs.map(ref => verses[ref] ? { reference: ref, ...splitVerse(verses[ref]) } : null).filter(Boolean);
     if (!gameVerses.length) return;
 
-    setCurrentVerses(gameVerses);
-    setCardList(gameVerses.map((verse, index) => ({
+    const filteredGameVerses = gameVerses.filter((v): v is { reference: string; firstHalf: string; secondHalf: string } => v !== null);
+    setCurrentVerses(filteredGameVerses);
+    setCardList(filteredGameVerses.map((verse, index) => ({
       id: index, reference: verse.reference, content: verse.firstHalf, matched: false, incorrectAttempts: 0,
     })));
-    setOptionList(gameVerses.map((verse, index) => ({ id: index, content: verse.secondHalf })).sort(() => 0.5 - Math.random()));
+    setOptionList(filteredGameVerses.map((verse, index) => ({ id: index, content: verse.secondHalf })).sort(() => 0.5 - Math.random()));
     
     // Reset all state
     setRevealedCards({});
@@ -270,7 +298,7 @@ const GameScreen: React.FC = () => {
     const currentReference = currentVerses[0]?.reference || '';
     return (
       <GameResults
-        gameType="Bible Verse Puzzle" level={gameData.level} reference={currentReference}
+        gameType="Match the Verse" level={gameData.level} reference={currentReference}
         verseText={currentReference ? verses[currentReference] : ''} score={score}
         isPersonalBest={levelCompletionData.isPersonalBest} time={levelCompletionData.totalTime}
         accuracy={levelCompletionData.accuracy} hintsUsed={0} maxHints={3} shekelsEarned={0}

@@ -8,7 +8,7 @@ import BottomSheet from "../components/BottomSheet";
 import GameCard from "../components/GameCard";
 import ProgressIndicator from "../components/ProgressIndicator";
 import ThemeToggle from "../components/ThemeToggle";
-import { config, logout } from "../lib/appwrite";
+import { config, loadUserProgress, logout, saveUserProgress } from "../lib/appwrite";
 import { useGameProgress } from "../lib/GameProgressContext";
 import { useGameState } from "../lib/gameState"; // Added import for game state
 import { useTheme } from "../lib/ThemeContext";
@@ -70,6 +70,22 @@ const HomeScreen = () => {
   const { isDark } = useTheme();
   const { isPhone, isTablet } = useResponsive();
   const { progress } = useGameProgress();
+  // Save current game's progress to Appwrite when it changes and user is logged in
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    // Get current user ID
+    const client = new Client();
+    client.setEndpoint(config.endpoint).setProject(config.projectId);
+    const account = new Account(client);
+    account.get().then(user => {
+      // Save only the current game's progress (e.g., "Guess the Character")
+      // You can change this to the relevant game key as needed
+      const gameKey = "Guess the Character";
+      if (progress[gameKey]) {
+        saveUserProgress(user.$id, { [gameKey]: progress[gameKey] });
+      }
+    });
+  }, [progress["Guess the Character"], isLoggedIn]);
   const { gameData } = useGameState(); // Added gameState hook
   const userLevel = progress["Guess the Character"]?.level || 1;
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
@@ -78,18 +94,58 @@ const HomeScreen = () => {
     message: "",
     type: "info" as "success" | "error" | "info",
   });
+
   const [isLoggedIn, setIsLoggedIn] = useState(false); // default to not logged in
 
-  // Appwrite session check
+  // Appwrite session check and load progress
+  const { updateProgress } = useGameProgress();
   useEffect(() => {
     const client = new Client();
     client.setEndpoint(config.endpoint).setProject(config.projectId);
     const account = new Account(client);
     account.get().then(
-      () => setIsLoggedIn(true),
+      async (user) => {
+        setIsLoggedIn(true);
+        // Load user progress from Appwrite and update context
+        try {
+          const progress = await loadUserProgress(user.$id);
+          if (progress) {
+            // Only update progress for known games
+            const allowedGames = [
+              "Guess the Character",
+              "Match the Verse",
+              "Reviews"
+            ];
+            Object.entries(progress).forEach(([game, data]) => {
+              if (allowedGames.includes(game)) {
+                updateProgress(game as any, data as Partial<Record<string, any>>);
+              }
+            });
+          }
+        } catch (e) {
+          // No progress found or error
+        }
+      },
       () => setIsLoggedIn(false)
     );
   }, []);
+
+  // Save current game's progress to Appwrite when it changes and user is logged in
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    // Get current user ID
+    const client = new Client();
+    client.setEndpoint(config.endpoint).setProject(config.projectId);
+    const account = new Account(client);
+    account.get().then(user => {
+      // Save only the current game's progress (e.g., "Guess the Character")
+      // You can change this to the relevant game key as needed
+      const gameKey = "Guess the Character";
+      if (progress[gameKey]) {
+        saveUserProgress(user.$id, { [gameKey]: progress[gameKey] });
+      }
+    });
+  }, [progress["Guess the Character"], isLoggedIn]);
 
 
   // Handle game selection
@@ -142,6 +198,7 @@ const HomeScreen = () => {
           setIsLoggedIn(true); // still logged in
         } catch {
           setIsLoggedIn(false); // session closed
+          router.replace('/(auth)/sign-in');
         }
       } catch (error) {
         // Optionally show error
