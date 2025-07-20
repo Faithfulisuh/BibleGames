@@ -11,8 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { createUser } from '../../lib/appwrite';
 import BottomSheet from '../../components/BottomSheet';
+import { createUser } from '../../lib/appwrite';
 
 interface FormData {
   userName: string;

@@ -1,5 +1,21 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
+import { Account } from 'appwrite';
+import { loadUserProgress, saveUserProgress } from './appwrite';
+
+// Temporary auth context type until we have the real one
+type AuthContextType = {
+  user: {
+    $id: string;
+    email?: string;
+    name?: string;
+  } | null;
+};
+
+// Create a temporary auth context
+const AuthContext = createContext<AuthContextType>({ user: null });
+
+// Export a custom hook to use the auth context
+export const useAuth = () => useContext(AuthContext);
 
 // Game progress interface
 export interface GameProgress {
@@ -84,47 +100,88 @@ export const useGameProgress = () => {
 };
 
 export const GameProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [progress, setProgress] = useState<Record<string, GameProgress>>({});
+  const [progress, setProgress] = useState<Record<string, GameProgress>>(defaultProgress);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
 
-  // Load progress from AsyncStorage on mount
+  // Load progress from Appwrite when user changes
   useEffect(() => {
     const loadProgress = async () => {
+      if (!user) {
+        setProgress({...defaultProgress});
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        const storedProgress = await AsyncStorage.getItem('gameProgress');
-        if (storedProgress) {
-          setProgress(JSON.parse(storedProgress));
+        setIsLoading(true);
+        const appwriteProgress = await loadUserProgress(user.$id);
+        
+        if (appwriteProgress && appwriteProgress.length > 0) {
+          // Get the raw progress data from the document
+          const savedData = appwriteProgress[0];
+          
+          // Create a new progress object with default values
+          const mergedProgress = {...defaultProgress};
+          
+          // If we have progress data, merge it with defaults
+          if (savedData && typeof savedData === 'object') {
+            // Type assertion for the saved data
+            const savedProgress = savedData as Record<string, any>;
+            
+            // Update each game type with saved data if available
+            (Object.keys(defaultProgress) as Array<keyof typeof defaultProgress>).forEach(gameType => {
+              const savedGameData = savedProgress[gameType];
+              if (savedGameData) {
+                mergedProgress[gameType] = {
+                  ...defaultProgress[gameType as keyof typeof defaultProgress],
+                  ...savedGameData,
+                  gameType: gameType as GameProgress['gameType']
+                };
+              }
+            });
+          }
+          
+          setProgress(mergedProgress);
         } else {
-          // Initialize with default progress
-          setProgress(defaultProgress);
-          await AsyncStorage.setItem('gameProgress', JSON.stringify(defaultProgress));
+          // No saved progress, use defaults
+          setProgress({...defaultProgress});
         }
       } catch (error) {
-        console.error('Error loading game progress:', error);
-        // Initialize with default progress on error
-        setProgress(defaultProgress);
+        console.error('Error loading game progress from Appwrite:', error);
+        // Fall back to default progress on error
+        setProgress({...defaultProgress});
+      } finally {
+        setIsLoading(false);
       }
     };
 
     loadProgress();
-  }, []);
+  }, [user]);
 
-  // Save progress to AsyncStorage whenever it changes
+  // Save progress to Appwrite whenever it changes
   useEffect(() => {
     const saveProgress = async () => {
+      if (!user || isLoading) return;
+
       try {
-        await AsyncStorage.setItem('gameProgress', JSON.stringify(progress));
+        // Only save if we have valid progress data
+        if (progress && typeof progress === 'object' && Object.keys(progress).length > 0) {
+          await saveUserProgress(user.$id, progress);
+        }
       } catch (error) {
-        console.error('Error saving game progress:', error);
+        console.error('Error saving game progress to Appwrite:', error);
       }
     };
 
-    if (Object.keys(progress).length > 0) {
+    // Only save if we have a user and we're not in the initial loading state
+    if (user && !isLoading) {
       saveProgress();
     }
-  }, [progress]);
+  }, [progress, user, isLoading]);
 
   // Update progress for a specific game
-  const updateProgress = async (
+  const updateProgress = useCallback(async (
     gameType: GameProgress['gameType'],
     updates: Partial<Omit<GameProgress, 'gameType'>>
   ) => {
@@ -143,30 +200,32 @@ export const GameProgressProvider: React.FC<{ children: React.ReactNode }> = ({ 
         [gameType]: updatedProgress,
       };
     });
-  };
+  }, []);
 
   // Get progress for a specific game
-  const getProgress = (gameType: GameProgress['gameType']) => {
-    return progress[gameType] || null;
-  };
+  const getProgress = useCallback((gameType: GameProgress['gameType']) => {
+    return progress[gameType] || defaultProgress[gameType];
+  }, [progress]);
 
   // Reset progress for a specific game
-  const resetProgress = async (gameType: GameProgress['gameType']) => {
+  const resetProgress = useCallback(async (gameType: GameProgress['gameType']) => {
     setProgress(prevProgress => ({
       ...prevProgress,
-      [gameType]: defaultProgress[gameType],
+      [gameType]: { ...defaultProgress[gameType] },
     }));
-  };
+  }, []);
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = React.useMemo(() => ({
+    progress,
+    updateProgress,
+    getProgress,
+    resetProgress,
+    isLoading,
+  }), [progress, updateProgress, getProgress, resetProgress, isLoading]);
 
   return (
-    <GameProgressContext.Provider
-      value={{
-        progress,
-        updateProgress,
-        getProgress,
-        resetProgress,
-      }}
-    >
+    <GameProgressContext.Provider value={contextValue}>
       {children}
     </GameProgressContext.Provider>
   );
