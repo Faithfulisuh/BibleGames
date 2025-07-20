@@ -113,7 +113,7 @@ export default function ReviewsScreen() {
   const [userName, setUserName] = useState('');
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
-  const [gameType, setGameType] = useState<Review['gameType']>('Match the Verse');
+  const [gameType, setGameType] = useState<Review['gameType']>('Bible Verse Puzzle');
   
   // State for filtering reviews
   const [filter, setFilter] = useState<FilterOption>('all');
@@ -149,7 +149,7 @@ export default function ReviewsScreen() {
     setUserName('');
     setRating(5);
     setComment('');
-    setGameType('Match the Verse');
+    setGameType('Bible Verse Puzzle');
     setIsModalVisible(false);
   };
   
@@ -284,15 +284,15 @@ export default function ReviewsScreen() {
             </Text>
             <View className="flex-row mb-4">
               <Pressable
-                onPress={() => setGameType('Match the Verse')}
-                className={`flex-1 p-3 rounded-lg mr-2 ${gameType === 'Match the Verse' 
+                onPress={() => setGameType('Bible Verse Puzzle')}
+                className={`flex-1 p-3 rounded-lg mr-2 ${gameType === 'Bible Verse Puzzle' 
                   ? 'bg-purpleGradientStart' 
                   : isDark 
                     ? 'bg-dark-background' 
                     : 'bg-lightGray'}`}
               >
-                <Text className={`text-center ${gameType === 'Match the Verse' ? 'text-white font-pbold' : isDark ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>
-                  Match the Verse
+                <Text className={`text-center ${gameType === 'Bible Verse Puzzle' ? 'text-white font-pbold' : isDark ? 'text-dark-textPrimary' : 'text-light-textPrimary'}`}>
+                  Bible Verse Puzzle
                 </Text>
               </Pressable>
               <Pressable

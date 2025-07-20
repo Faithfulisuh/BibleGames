@@ -2,13 +2,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  Alert,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { createUser } from '../../lib/appwrite'; // Adjust the import path as necessary
+import { createUser } from '../../lib/appwrite';
+import BottomSheet from '../../components/BottomSheet';
 
 interface FormData {
   userName: string;
@@ -26,138 +30,265 @@ const Signup: React.FC = () => {
   });
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertConfig, setAlertConfig] = useState({
+    title: '',
+    message: '',
+    type: 'info' as 'success' | 'error' | 'info',
+    onClose: () => {},
+    actions: [{ text: 'OK', onPress: () => setShowAlert(false) }]
+  });
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const showAlertMessage = (title: string, message: string, type: 'success' | 'error' | 'info' = 'info', onClose?: () => void, actions?: any[]) => {
+    setAlertConfig({
+      title,
+      message,
+      type,
+      onClose: onClose || (() => setShowAlert(false)),
+      actions: actions || [{ text: 'OK', onPress: () => setShowAlert(false) }]
+    });
+    setShowAlert(true);
+  };
+
   const handleCreateAccount = async () => {
-    // Add validation and submission logic here
+    // Validate all fields are filled
     if (!formData.userName || !formData.email || !formData.password || !formData.confirmPassword) {
-      Alert.alert('Please fill in all fields');
+      showAlertMessage('Missing Information', 'Please fill in all fields', 'error');
       return;
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      showAlertMessage('Invalid Email', 'Please enter a valid email address', 'error');
+      return;
+    }
+
+    // Validate password match
     if (formData.password !== formData.confirmPassword) {
-      Alert.alert('Passwords do not match', 'Please make sure your password and confirm password are the same.');
+      showAlertMessage('Password Mismatch', 'Please make sure your passwords match', 'error');
+      return;
+    }
+
+    // Validate password strength
+    if (formData.password.length < 8) {
+      showAlertMessage('Weak Password', 'Password must be at least 8 characters long', 'error');
+      return;
+    }
+
+    // Validate terms agreement
+    if (!agreeToTerms) {
+      showAlertMessage('Terms Not Accepted', 'You must agree to the Terms of Service and Privacy Policy', 'error');
       return;
     }
 
     setIsSubmitting(true);
+    
     try {
+      // Create the user account and sign them in
       const result = await createUser(formData.email, formData.password, formData.userName);
-      router.replace('/'); // Navigates to the root (index) route
-    } catch (error) {
-      setIsSubmitting(false); // Stop submitting if error
-      if (error instanceof Error) {
-        Alert.alert('Error creating account', error.message);
-      } else {
-        Alert.alert('Error creating account', 'An unknown error occurred.');
+      
+      // If we get here, account creation and sign-in were successful
+      showAlertMessage(
+        'Account Created', 
+        'Your account has been created successfully!', 
+        'success',
+        () => router.replace('/'),
+        [{ 
+          text: 'Continue', 
+          onPress: () => {
+            setShowAlert(false);
+            router.replace('/');
+          },
+          primary: true
+        }]
+      );
+      
+    } catch (error: any) {
+      // Handle specific error cases
+      let errorMessage = 'An error occurred during signup. Please try again.';
+      
+      if (error.code === 409) {
+        errorMessage = 'An account with this email already exists. Please use a different email or sign in.';
+      } else if (error.message) {
+        errorMessage = error.message;
       }
-      return; // Do not proceed if error
+      
+      showAlertMessage('Signup Failed', errorMessage, 'error');
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
-  const handleSignIn = (): void => {
-    router.push('/(auth)/sign-in');
+  const handleSignIn = () => {
+    if (!isSubmitting) {
+      router.replace('/(auth)/sign-in');
+    }
   };
 
 
   return (
-    <View className="flex-1 bg-[#A259FF]">
-      <View className="flex-1 justify-center items-center p-4">
-        <View className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
-          <Text className="text-2xl font-pbold text-darkGray mb-1 text-center">Create Account</Text>
-          <Text className="text-xs font-pregular text-mediumGray mb-5 text-center">Join the Word Bits community</Text>
-
-          {/* user name */}
-          <Text className="mb-1 text-xs font-psemibold text-darkGray">Username</Text>
-          <View className="flex-row items-center bg-lightGray rounded-lg border border-light border-solid px-3 h-16 mb-3">
-            <Ionicons name="person-outline" size={18} color="#A259FF" style={{ marginRight: 8 }} />
-            <TextInput
-              className="flex-1 text-sm text-darkGray font-pregular"
-              placeholder="Enter your username"
-              placeholderTextColor="#BDBDBD"
-              value={formData.userName}
-              onChangeText={text => handleInputChange('userName', text)}
-            />
-          </View>
-
-          {/* Email */}
-          <Text className="mb-1 text-xs font-psemibold text-darkGray">Email</Text>
-          <View className="flex-row items-center bg-lightGray rounded-lg border border-light border-solid px-3 h-16 mb-3">
-            <Ionicons name="mail-outline" size={18} color="#A259FF" style={{ marginRight: 8 }} />
-            <TextInput
-              className="flex-1 text-sm text-darkGray font-pregular"
-              placeholder="Enter your email"
-              placeholderTextColor="#BDBDBD"
-              value={formData.email}
-              onChangeText={text => handleInputChange('email', text)}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
-
-          {/* Password */}
-          <Text className="mb-1 text-xs font-psemibold text-darkGray">Password</Text>
-          <View className="flex-row items-center bg-lightGray rounded-lg border border-light border-solid px-3 h-16 mb-3">
-            <Ionicons name="lock-closed-outline" size={18} color="#A259FF" style={{ marginRight: 8 }} />
-            <TextInput
-              className="flex-1 text-sm text-darkGray font-pregular"
-              placeholder="Create a password"
-              placeholderTextColor="#BDBDBD"
-              value={formData.password}
-              onChangeText={text => handleInputChange('password', text)}
-              secureTextEntry={true}
-            />
-          </View>
-
-          {/* Confirm Password */}
-          <Text className="mb-1 text-xs font-psemibold text-darkGray">Confirm Password</Text>
-          <View className="flex-row items-center bg-lightGray rounded-lg border border-light border-solid px-3 h-16 mb-4">
-            <Ionicons name="lock-closed-outline" size={18} color="#A259FF" style={{ marginRight: 8 }} />
-            <TextInput
-              className="flex-1 text-sm text-darkGray font-pregular"
-              placeholder="Confirm your password"
-              placeholderTextColor="#BDBDBD"
-              value={formData.confirmPassword}
-              onChangeText={text => handleInputChange('confirmPassword', text)}
-              secureTextEntry={true}
-            />
-          </View>
-
-          {/* Checkbox */}
-          <TouchableOpacity
-            onPress={() => setAgreeToTerms(!agreeToTerms)}
-            className="flex-row items-center mb-4"
-          >
-            <View className={`mr-2 h-5 w-5 rounded border border-light justify-center items-center ${agreeToTerms ? 'bg-[#A259FF]' : 'bg-white'}`}>
-              {agreeToTerms && <Ionicons name="checkmark" size={14} color="#fff" />}
+    <>
+      <BottomSheet
+        isVisible={showAlert}
+        onClose={() => setShowAlert(false)}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+        actions={alertConfig.actions}
+      />
+      <KeyboardAvoidingView 
+        className="flex-1 bg-[#A259FF]"
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <ScrollView 
+          className="flex-1" 
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View className="flex-1 p-6">
+            {/* Header */}
+            <View className="items-center mb-8 mt-4">
+              <Text className="text-white text-3xl font-pbold mb-2">Create Account</Text>
+              <Text className="text-white text-center opacity-80">Join us and start your Bible journey</Text>
             </View>
-            <Text className="text-xs font-pregular text-darkGray">
-              I agree to the <Text className="font-pbold text-[#A259FF]">Terms of Service</Text> and <Text className="font-pbold text-[#A259FF]">Privacy Policy</Text>
-            </Text>
-          </TouchableOpacity>
 
-          {/* Create Account Button */}
-          <TouchableOpacity
-            onPress={handleCreateAccount}
-            className="w-full h-16 rounded-lg justify-center items-center mb-4 bg-[#A259FF]"
-          >
-            <Text className="text-white font-psemibold text-base">Create Account</Text>
-          </TouchableOpacity>
+            {/* Form */}
+            <View className="bg-white rounded-2xl p-6 mb-6">
+              {/* Username */}
+              <View className="mb-4">
+                <Text className="text-textPrimary font-pmedium mb-2">Username</Text>
+                <View className="flex-row items-center border border-gray-200 rounded-xl px-4 py-3">
+                  <Ionicons name="person-outline" size={20} color="#6B7280" style={{ marginRight: 10 }} />
+                  <TextInput
+                    className="flex-1 font-pregular text-textPrimary"
+                    placeholder="Choose a username"
+                    placeholderTextColor="#9CA3AF"
+                    value={formData.userName}
+                    onChangeText={(text) => handleInputChange('userName', text)}
+                    editable={!isSubmitting}
+                  />
+                </View>
+              </View>
 
-          {/* Sign In */}
-          <View className="flex-row justify-center items-center">
-            <Text className="text-sm font-pregular text-darkGray">Already have an account?</Text>
-            <TouchableOpacity onPress={handleSignIn}>
-              <Text className="ml-1 font-pbold text-[#A259FF] text-sm">Sign In</Text>
-            </TouchableOpacity>
+              {/* Email */}
+              <View className="mb-4">
+                <Text className="text-textPrimary font-pmedium mb-2">Email</Text>
+                <View className="flex-row items-center border border-gray-200 rounded-xl px-4 py-3">
+                  <Ionicons name="mail-outline" size={20} color="#6B7280" style={{ marginRight: 10 }} />
+                  <TextInput
+                    className="flex-1 font-pregular text-textPrimary"
+                    placeholder="Enter your email"
+                    placeholderTextColor="#9CA3AF"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    value={formData.email}
+                    onChangeText={(text) => handleInputChange('email', text)}
+                    editable={!isSubmitting}
+                  />
+                </View>
+              </View>
+
+              {/* Password */}
+              <View className="mb-4">
+                <Text className="text-textPrimary font-pmedium mb-2">Password</Text>
+                <View className="flex-row items-center border border-gray-200 rounded-xl px-4 py-3">
+                  <Ionicons name="lock-closed-outline" size={20} color="#6B7280" style={{ marginRight: 10 }} />
+                  <TextInput
+                    className="flex-1 font-pregular text-textPrimary"
+                    placeholder="Create a password"
+                    placeholderTextColor="#9CA3AF"
+                    secureTextEntry
+                    value={formData.password}
+                    onChangeText={(text) => handleInputChange('password', text)}
+                    editable={!isSubmitting}
+                  />
+                </View>
+              </View>
+
+              {/* Confirm Password */}
+              <View className="mb-6">
+                <Text className="text-textPrimary font-pmedium mb-2">Confirm Password</Text>
+                <View className="flex-row items-center border border-gray-200 rounded-xl px-4 py-3">
+                  <Ionicons name="lock-closed-outline" size={20} color="#6B7280" style={{ marginRight: 10 }} />
+                  <TextInput
+                    className="flex-1 font-pregular text-textPrimary"
+                    placeholder="Confirm your password"
+                    placeholderTextColor="#9CA3AF"
+                    secureTextEntry
+                    value={formData.confirmPassword}
+                    onChangeText={(text) => handleInputChange('confirmPassword', text)}
+                    editable={!isSubmitting}
+                    onSubmitEditing={handleCreateAccount}
+                  />
+                </View>
+              </View>
+
+              {/* Terms and Conditions */}
+              <View className="flex-row items-start mb-6">
+                <TouchableOpacity 
+                  onPress={() => setAgreeToTerms(!agreeToTerms)}
+                  className="mt-1 mr-3"
+                  disabled={isSubmitting}
+                >
+                  <View className={`w-5 h-5 rounded-md border-2 ${agreeToTerms ? 'bg-primary border-primary' : 'border-gray-300'} items-center justify-center`}>
+                    {agreeToTerms && <Ionicons name="checkmark" size={16} color="white" />}
+                  </View>
+                </TouchableOpacity>
+                <Text className="flex-1 text-textSecondary text-sm">
+                  I agree to the{' '}
+                  <Text className="text-primary font-psemibold">Terms of Service</Text> and{' '}
+                  <Text className="text-primary font-psemibold">Privacy Policy</Text>
+                </Text>
+              </View>
+
+              {/* Submit Button */}
+              <TouchableOpacity
+                onPress={handleCreateAccount}
+                disabled={isSubmitting}
+                className={`py-4 rounded-xl items-center ${isSubmitting ? 'bg-primary/70' : 'bg-primary'}`}
+              >
+                {isSubmitting ? (
+                  <View className="flex-row items-center">
+                    <ActivityIndicator color="white" style={{ marginRight: 8 }} />
+                    <Text className="text-white font-psemibold">
+                      Creating your account and setting up your game data...
+                    </Text>
+                  </View>
+                ) : (
+                  <Text className="text-white text-center font-psemibold">
+                    Create Account
+                  </Text>
+                )}
+              </TouchableOpacity>
+
+              {/* Sign In */}
+              <View className="mt-4 flex-row justify-center">
+                <Text className="text-textSecondary text-sm">Already have an account? </Text>
+                <TouchableOpacity onPress={handleSignIn} disabled={isSubmitting}>
+                  <Text className={`text-primary text-sm font-psemibold ${isSubmitting ? 'opacity-50' : ''}`}>
+                    Sign In
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              
+              {isSubmitting && (
+                <View className="mt-4 p-3 bg-blue-50 rounded-lg">
+                  <Text className="text-blue-800 text-sm text-center">
+                    Creating your account and setting up your game data...
+                  </Text>
+                </View>
+              )}
+            </View>
           </View>
-        </View>
-      </View>
-    </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </>
   );
-}
+};
 export default Signup;

@@ -3,7 +3,7 @@ import { Account, Client } from "appwrite";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import BottomSheet from "../components/BottomSheet";
 import GameCard from "../components/GameCard";
 import ProgressIndicator from "../components/ProgressIndicator";
@@ -70,6 +70,15 @@ const HomeScreen = () => {
   const { isDark } = useTheme();
   const { isPhone, isTablet } = useResponsive();
   const { progress } = useGameProgress();
+  const { gameData } = useGameState(); // Added gameState hook
+  const userLevel = progress["Guess the Character"]?.level || 1;
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // default to not logged in
+  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const [bottomSheetContent, setBottomSheetContent] = useState({
+    title: "",
+    message: "",
+    type: "info" as "success" | "error" | "info",
+  });
   // Save current game's progress to Appwrite when it changes and user is logged in
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -86,16 +95,6 @@ const HomeScreen = () => {
       }
     });
   }, [progress["Guess the Character"], isLoggedIn]);
-  const { gameData } = useGameState(); // Added gameState hook
-  const userLevel = progress["Guess the Character"]?.level || 1;
-  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
-  const [bottomSheetContent, setBottomSheetContent] = useState({
-    title: "",
-    message: "",
-    type: "info" as "success" | "error" | "info",
-  });
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // default to not logged in
 
   // Appwrite session check and load progress
   const { updateProgress } = useGameProgress();
@@ -219,7 +218,7 @@ const HomeScreen = () => {
       <View className="pt-12 pb-4 px-4 flex-row justify-between items-center">
         <View className="flex-row items-center">
           <View className="h-10 w-10 bg-purpleGradientStart rounded-lg items-center justify-center mr-3">
-            <Ionicons name="book" size={20} color="white" />
+            <Image source={require('../assets/images/icon.png')} style={{ width: 60, height: 60 }} className="rounded-3xl mr-2" />
           </View>
           <View className="flex-row items-center">
             <Text
@@ -301,10 +300,10 @@ const HomeScreen = () => {
 
         {/* Community Reviews */}
         <GameCard
-          title="Community Reviews"
+          title="Community Chat"
           description="Share your experience and read what others say"
           difficulty="All Users"
-          icon={<Ionicons name="star" size={24} color="white" />}
+          icon={<Ionicons name="chatbubble-ellipses-outline" size={24} color="white" />}
           variant="green"
           stats={{
             played: progress["Reviews"]?.completedLevels?.length || 0,
@@ -334,6 +333,9 @@ const HomeScreen = () => {
           isReady={false}
           onPress={() => {}}
         />
+        <TouchableOpacity onPress={handleAuth}>
+          <Text className="font-psemibold text-blue-600">{isLoggedIn ? 'Logout' : 'Login'}</Text>
+        </TouchableOpacity>
 
         {/* Bottom padding */}
         <View className="pb-8" />

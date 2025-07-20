@@ -2,17 +2,37 @@ import { signIn } from '@/lib/appwrite';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import BottomSheet from '../../components/BottomSheet';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertConfig, setAlertConfig] = useState({
+    title: '',
+    message: '',
+    type: 'info' as 'success' | 'error' | 'info',
+    onClose: () => {},
+    actions: [{ text: 'OK', onPress: () => setShowAlert(false) }]
+  });
+
+  const showAlertMessage = (title: string, message: string, type: 'success' | 'error' | 'info' = 'info', onClose?: () => void, actions?: any[]) => {
+    setAlertConfig({
+      title,
+      message,
+      type,
+      onClose: onClose || (() => setShowAlert(false)),
+      actions: actions || [{ text: 'OK', onPress: () => setShowAlert(false) }]
+    });
+    setShowAlert(true);
+  };
 
   const handleSignIn = async () => {
     if (!email || !password) {
-      Alert.alert('Please fill in all fields');
+      showAlertMessage('Missing Information', 'Please fill in all fields', 'error');
       return;
     }
 
@@ -21,12 +41,16 @@ const SignIn = () => {
     try {
       await signIn(email, password);
       router.replace('/'); // Navigates to the root (index) route
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert('Error signing in', error.message);
-      } else {
-        Alert.alert('Error signing in', 'An unknown error occurred.');
+    } catch (error: any) {
+      let errorMessage = 'An unknown error occurred while signing in.';
+      
+      if (error.code === 401) {
+        errorMessage = 'Invalid email or password. Please try again.';
+      } else if (error.message) {
+        errorMessage = error.message;
       }
+      
+      showAlertMessage('Sign In Failed', errorMessage, 'error');
     } finally {
       setLoading(false);
     }
@@ -43,6 +67,14 @@ const SignIn = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#A259FF]">
+      <BottomSheet
+        isVisible={showAlert}
+        onClose={() => setShowAlert(false)}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+        actions={alertConfig.actions}
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
@@ -52,7 +84,7 @@ const SignIn = () => {
             <View className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg items-center">
               <View className="mb-4 items-center">
                 <View className="mb-2 rounded-full bg-gradient-to-r from-[#A259FF] to-[#3A5BFF] p-3">
-                  <Image source={require('../../assets/icons/bookmark.png')} style={{ width: 32, height: 32 }} />
+                  <Image source={require('../../assets/images/icon.png')} style={{ width: 60, height: 60 }} />
                 </View>
                 <Text className="mb-1 font-pbold text-2xl text-darkGray">Word Bits</Text>
                 <Text className="text-center font-pregular text-xs text-mediumGray">Learn • Play • Grow</Text>
